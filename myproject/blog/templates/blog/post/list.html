@@ -1,0 +1,21 @@
+<!--Afiseaza in pagina lista de postari-->
+
+{% extends "blog/base.html" %}
+
+{% block title %}My Blog{% endblock %}
+
+
+<!--lista post[rilor-->
+{% block content %}
+    {% for post in posts %}
+        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+        <p class="date">Published {{ post.publish }} by {{ post.author }}</p>
+        <p>{{ post.body|truncatewords:30|linebreaks }}</p>
+
+        {% with post.comments.count as total_comments %}
+            <p>{{ total_comments }} comment{{ total_comments|pluralize }}</p>
+        {% endwith %}
+
+
+    {% endfor %}
+{% endblock %}

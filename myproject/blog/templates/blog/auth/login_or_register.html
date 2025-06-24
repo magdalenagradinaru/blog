@@ -1,0 +1,68 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Login or Register</h1>
+    <div class="row mt-5">
+        <!-- Login Form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'blog:login_or_register' %}">
+                        {% csrf_token %}
+                        {{ auth_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    {% if auth_form.errors %}
+                        <div class="alert alert-danger mt-3">
+                            <ul>
+                                {% for field in auth_form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Register</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'blog:login_or_register' %}">
+                        {% csrf_token %}
+                        {{ reg_form.as_p }}
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </form>
+                    {% if reg_form.errors %}
+                        <div class="alert alert-danger mt-3">
+                            <ul>
+                                {% for field in reg_form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <a class="nav-link btn btn-secondary mt-4" href="{% url 'blog:project_index' %}">Project Index</a>
+
+</div>
+{% endblock %}

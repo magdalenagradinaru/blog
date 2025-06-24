@@ -1,0 +1,57 @@
+{% extends "blog/base.html" %}
+
+
+<!--titlul postării curente-->
+{% block title %}{{ post.title }}{% endblock %}
+
+
+<!--blocul de conținut-->
+{% block content %}
+
+
+<h1>{{ post.title }}</h1>
+<p class="date">Published {{ post.publish }} by {{ post.author }}</p>
+{{ post.body|linebreaks }}
+
+
+
+<!--Div pentru comentarii -->
+<div class="card border-primary mb-3" style="max-width: 50rem;">
+  <div class="card-header">
+      {% with comments.count as total_comments %}
+    <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+{% endwith %}
+  </div>
+
+    <!--afișează lista de comentarii dacă exista -->
+  <div class="card-body">
+{% if comments %}
+        {% for comment in comments %}
+            <div class="comment">
+                <p class="info">
+                    <strong>{{ comment.name }}</strong> commented on {{ comment.created }}
+                </p>
+
+                <p>{{ comment.body }}</p>
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Formular pentru adăugarea unui comentariu -->
+<form action="." method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit" class="btn btn-outline-secondary">Add comment</button>
+</form>
+
+
+
+<!-- Buton pentru întoarcerea la pagina anterioară -->
+<p><a href="/blog/">Back to Blog</a></p>
+
+{% endblock %}
