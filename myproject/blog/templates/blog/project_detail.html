@@ -1,0 +1,37 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h1>{{ project.title }}</h1>
+<div class="row">
+    <div class="col-md-8">
+        {% if project.image %}
+            <img src="{{ project.image.url }}" width="100%">
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <h5>About the project:</h5>
+        <p>{{ project.description }}</p>
+        <br>
+
+        <h5>Technology used:</h5>
+        <p>{{ project.technology.name }}</p>
+
+        <h5>Project Score:</h5>
+        <p>{{ project.score }}</p>
+
+        <h5>Complexity Status:</h5>
+        <p>{{ project.complexity_status }}</p>
+
+
+         {% if project.project_file %}
+            <h5>Download Project File:</h5>
+            <a href="{{ project.project_file.url }}" target="_blank">Download File</a>
+        {% else %}
+            <p>No project file uploaded.</p>
+        {% endif %}
+
+    </div>
+        <a class="nav-link btn btn-secondary mt-4" href="{% url 'blog:project_index' %}">Back</a>
+
+</div>
+{% endblock %}

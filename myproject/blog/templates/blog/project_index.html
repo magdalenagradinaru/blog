@@ -1,0 +1,62 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-grid gap-2">
+        <a href="{% url 'blog:add_project' %}" class="btn btn-lg btn-success">Add your project and inspire someone today!</a>
+    </div>
+
+{% if user.is_authenticated %}
+    <br>
+    <h5>You already have an account? If you don't, create one.</h5>
+    <a href="{% url 'blog:private' %}" class="btn btn-lg btn-info">Personal Portofolio</a>
+
+{% else %}
+    <br>
+    <a href="{% url 'blog:login_or_register' %}" class="btn btn-lg btn-primary">Acces your pesonal portofolio</a>
+{% endif %}
+
+
+
+
+    <h1 class="mt-4">Projects</h1>
+
+
+
+    <!-- Gruparea proiectelor pe tehnologii -->
+    {% for technology in technologies %}
+        <div class="list-group-item list-group-item-light mb-3">
+            <h5 class="mb-1">{{ technology.name }}</h5>
+
+            <!-- Iterare prin proiectele asociate tehnologiei -->
+            {% for project in technology.projects.all %}
+                <div class="card mb-3 col-12" >
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            {% if project.image %}
+                                <img src="{{ project.image.url }}" class="img-fluid rounded-start" alt="{{ project.title }}">
+                            {% else %}
+                                <img src="{% static 'images/default.jpg' %}" class="img-fluid rounded-start" alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ project.title }}</h5>
+                                <p class="card-text">{{ project.description }}</p>
+                                <p class="card-text">
+                                    <small class="text-muted">Created: {{ project.created_at|date:"F j, Y" }}</small>
+                                </p>
+                                <a href="{% url 'blog:project_detail' project.pk %}" class="btn btn-primary btn-sm">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-muted">Zero projects.</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

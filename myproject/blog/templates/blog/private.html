@@ -1,0 +1,74 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Welcome, {{ user.username }}!</h1>
+
+    <h2>Your Projects</h2>
+    <ul class="list-group">
+        {% for project in projects %}
+            <li class="list-group-item mb-3">
+                <div class="d-flex justify-content-between">
+                    <h5><strong>{{ project.title }}</strong></h5>
+                </div>
+                <p>{{ project.description|truncatewords:30 }}</p>
+                <p><strong>Uploaded File:</strong>
+                    {% if project.file %}
+                        <a href="{{ project.file.url }}" class="btn btn-link">Download</a>
+                    {% else %}
+                        No file uploaded
+                    {% endif %}
+                </p>
+            </li>
+        {% empty %}
+            <li class="list-group-item">You have no research projects yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Add a Project</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Title:</label>
+                <input type="text" name="title" id="id_title" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description:</label>
+                <textarea name="description" id="id_description" class="form-control" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="id_file" class="form-label">Upload File:</label>
+                <input type="file" name="file" id="id_file" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Add Project</button>
+        </fieldset>
+    </form>
+
+    {% if form.errors %}
+        <div class="alert alert-danger mt-3">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
+<form method="POST" action="{% url 'blog:logout' %}" class="mt-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+
+
+
+
+
+</div>
+{% endblock %}
